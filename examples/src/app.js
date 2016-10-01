@@ -151,6 +151,44 @@ render(
 			orientation,
 			useForDemo,
 		}))} theme={theme} showThumbnails />
+
+		<h3>Custom Images</h3>
+		<Gallery
+			images={THEMED_IMAGES.map(({ caption, id, orientation, useForDemo }) => ({
+				src: makeUnsplashSrc(id),
+				thumbnail: makeUnsplashThumbnail(id, orientation),
+				srcset: [
+					makeUnsplashSrcSet(id, 1024),
+					makeUnsplashSrcSet(id, 800),
+					makeUnsplashSrcSet(id, 500),
+					makeUnsplashSrcSet(id, 320),
+				],
+				caption,
+				orientation,
+				useForDemo,
+			}))}
+			renderImage={(item) => {
+				return (
+					<figure className={item.contentClassName} style={{ display: 'flex' }}>
+						<img
+							className={item.className}
+							onClick={item.onClick}
+							sizes={item.sizes}
+							src={item.image.src}
+							srcSet={item.srcSet}
+							style={{
+								...item.style,
+								maxWidth: 'calc(100% - 250px)',
+							}}
+						/>
+						<div style={{ width: 250, color: 'white', padding: 5 }}>
+							{item.image.caption}
+						</div>
+					</figure>
+				);
+			}}
+			showThumbnails
+		/>
 	</div>,
 	document.getElementById('example')
 );
