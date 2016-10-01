@@ -90,6 +90,7 @@ class Gallery extends Component {
 					onClickPrev={this.gotoPrevious}
 					onClickThumbnail={this.gotoImage}
 					onClose={this.closeLightbox}
+					renderImage={this.props.renderImage}
 					showThumbnails={this.props.showThumbnails}
 					theme={this.props.theme}
 				/>
