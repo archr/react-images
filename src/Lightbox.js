@@ -199,6 +199,7 @@ class Lightbox extends Component {
 		if (!images || !images.length) return null;
 
 		const image = images[currentImage];
+		const renderImage = this.props.renderImage || this.renderImage;
 
 		let srcset;
 		let sizes;
@@ -211,30 +212,42 @@ class Lightbox extends Component {
 		const thumbnailsSize = showThumbnails ? theme.thumbnail.size : 0;
 		const heightOffset = `${theme.header.height + theme.footer.height + thumbnailsSize + (theme.container.gutter.vertical)}px`;
 
+		const item = {
+			image,
+			className: css(classes.image),
+			style: {
+				cursor: this.props.onClickImage ? 'pointer' : 'auto',
+				maxHeight: `calc(100vh - ${heightOffset})`,
+			},
+			sizes: sizes,
+			contentClassName: css(classes.figure),
+			srcset: srcset,
+			onClick: !!onClickImage && onClickImage,
+			countCurrent: currentImage + 1,
+			countSeparator: imageCountSeparator,
+			countTotal: images.length,
+			showCount: showImageCount,
+		};
+
+		return renderImage(item);
+	}
+	renderImage (item) {
 		return (
-			<figure className={css(classes.figure)}>
-				{/*
-					Re-implement when react warning "unknown props"
-					https://fb.me/react-unknown-prop is resolved
-					<Swipeable onSwipedLeft={this.gotoNext} onSwipedRight={this.gotoPrev} />
-				*/}
+			<figure className={item.contentClassName}>
 				<img
-					className={css(classes.image)}
-					onClick={!!onClickImage && onClickImage}
-					sizes={sizes}
-					src={image.src}
-					srcSet={srcset}
-					style={{
-						cursor: this.props.onClickImage ? 'pointer' : 'auto',
-						maxHeight: `calc(100vh - ${heightOffset})`,
-					}}
+					className={item.className}
+					onClick={item.onClick}
+					sizes={item.sizes}
+					src={item.image.src}
+					srcSet={item.srcSet}
+					style={item.style}
 				/>
 				<Footer
-					caption={images[currentImage].caption}
-					countCurrent={currentImage + 1}
-					countSeparator={imageCountSeparator}
-					countTotal={images.length}
-					showCount={showImageCount}
+					caption={item.image.caption}
+					countCurrent={item.countCurrent}
+					countSeparator={item.countSeparator}
+					countTotal={item.countTotal}
+					showCount={item.showCount}
 				/>
 			</figure>
 		);
@@ -282,6 +295,7 @@ Lightbox.propTypes = {
 	onClickPrev: PropTypes.func,
 	onClose: PropTypes.func.isRequired,
 	preloadNextImage: PropTypes.bool,
+	renderImage: PropTypes.func,
 	sheet: PropTypes.object,
 	showCloseButton: PropTypes.bool,
 	showImageCount: PropTypes.bool,
