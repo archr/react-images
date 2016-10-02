@@ -1640,6 +1640,13 @@ var Lightbox = (function (_Component) {
 			};
 		}
 	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			if (this.props.enableKeyboardInput) {
+				window.addEventListener('keydown', this.handleKeyboardInput);
+			}
+		}
+	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
 			if (!_utils.canUseDom) return;
@@ -1668,9 +1675,11 @@ var Lightbox = (function (_Component) {
 			}
 
 			// add event listeners
-			if (nextProps.enableKeyboardInput) {
+			if (!this.props.enableKeyboardInput && nextProps.enableKeyboardInput) {
 				window.addEventListener('keydown', this.handleKeyboardInput);
-			} else {
+			}
+
+			if (this.props.enableKeyboardInput && !nextProps.enableKeyboardInput) {
 				window.removeEventListener('keydown', this.handleKeyboardInput);
 			}
 		}
