@@ -215,15 +215,16 @@ class Lightbox extends Component {
 		}
 
 		const thumbnailsSize = showThumbnails ? theme.thumbnail.size : 0;
-		const heightOffset = `${theme.header.height + theme.footer.height + thumbnailsSize + (theme.container.gutter.vertical)}px`;
+		const heightOffset = theme.header.height + theme.footer.height + thumbnailsSize + (theme.container.gutter.vertical);
 
 		const item = {
 			image,
 			className: css(classes.image),
 			style: {
 				cursor: this.props.onClickImage ? 'pointer' : 'auto',
-				maxHeight: `calc(100vh - ${heightOffset})`,
+				maxHeight: `calc(100vh - ${heightOffset}px)`,
 			},
+			heightOffset: heightOffset,
 			sizes: sizes,
 			contentClassName: css(classes.figure),
 			srcset: srcset,
