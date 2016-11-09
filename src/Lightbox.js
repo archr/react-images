@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { css, StyleSheet } from 'aphrodite/no-important';
-// import Swipeable from 'react-swipeable';
+import ScrollLock from 'react-scrolllock';
 
 import theme from './theme';
 import Arrow from './components/Arrow';
@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import PaginatedThumbnails from './components/PaginatedThumbnails';
 import Portal from './components/Portal';
-import ScrollLock from './components/ScrollLock';
 
 import { bindFunctions, canUseDom } from './utils';
 
@@ -29,7 +28,7 @@ class Lightbox extends Component {
 		};
 	}
 	componentDidMount () {
-		if (this.props.enableKeyboardInput) {
+		if (this.props.isOpen && this.props.enableKeyboardInput) {
 			window.addEventListener('keydown', this.handleKeyboardInput);
 		}
 	}
@@ -59,12 +58,11 @@ class Lightbox extends Component {
 			}
 		}
 
-		// add event listeners
-		if (!this.props.enableKeyboardInput && nextProps.enableKeyboardInput) {
+		// add/remove event listeners
+		if (!this.props.isOpen && nextProps.isOpen && nextProps.enableKeyboardInput) {
 			window.addEventListener('keydown', this.handleKeyboardInput);
 		}
-
-		if (this.props.enableKeyboardInput && !nextProps.enableKeyboardInput) {
+		if (!nextProps.isOpen && nextProps.enableKeyboardInput) {
 			window.removeEventListener('keydown', this.handleKeyboardInput);
 		}
 	}
@@ -110,13 +108,13 @@ class Lightbox extends Component {
 
 	}
 	handleKeyboardInput (event) {
-		if (event.keyCode === 37) {
+		if (event.keyCode === 37) { // left
 			this.gotoPrev(event);
 			return true;
-		} else if (event.keyCode === 39) {
+		} else if (event.keyCode === 39) { // right
 			this.gotoNext(event);
 			return true;
-		} else if (event.keyCode === 27) {
+		} else if (event.keyCode === 27) { // esc
 			this.props.onClose();
 			return true;
 		}
@@ -303,7 +301,6 @@ Lightbox.propTypes = {
 	onClose: PropTypes.func.isRequired,
 	preloadNextImage: PropTypes.bool,
 	renderImage: PropTypes.func,
-	sheet: PropTypes.object,
 	showCloseButton: PropTypes.bool,
 	showImageCount: PropTypes.bool,
 	showThumbnails: PropTypes.bool,
