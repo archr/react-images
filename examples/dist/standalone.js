@@ -1585,7 +1585,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _aphroditeNoImportant = require('aphrodite/no-important');
 
-// import Swipeable from 'react-swipeable';
+var _reactScrolllock = require('react-scrolllock');
+
+var _reactScrolllock2 = _interopRequireDefault(_reactScrolllock);
 
 var _theme = require('./theme');
 
@@ -1615,10 +1617,6 @@ var _componentsPortal = require('./components/Portal');
 
 var _componentsPortal2 = _interopRequireDefault(_componentsPortal);
 
-var _componentsScrollLock = require('./components/ScrollLock');
-
-var _componentsScrollLock2 = _interopRequireDefault(_componentsScrollLock);
-
 var _utils = require('./utils');
 
 var Lightbox = (function (_Component) {
@@ -1642,7 +1640,7 @@ var Lightbox = (function (_Component) {
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			if (this.props.enableKeyboardInput) {
+			if (this.props.isOpen && this.props.enableKeyboardInput) {
 				window.addEventListener('keydown', this.handleKeyboardInput);
 			}
 		}
@@ -1674,12 +1672,11 @@ var Lightbox = (function (_Component) {
 				}
 			}
 
-			// add event listeners
-			if (!this.props.enableKeyboardInput && nextProps.enableKeyboardInput) {
+			// add/remove event listeners
+			if (!this.props.isOpen && nextProps.isOpen && nextProps.enableKeyboardInput) {
 				window.addEventListener('keydown', this.handleKeyboardInput);
 			}
-
-			if (this.props.enableKeyboardInput && !nextProps.enableKeyboardInput) {
+			if (!nextProps.isOpen && nextProps.enableKeyboardInput) {
 				window.removeEventListener('keydown', this.handleKeyboardInput);
 			}
 		}
@@ -1734,12 +1731,15 @@ var Lightbox = (function (_Component) {
 		key: 'handleKeyboardInput',
 		value: function handleKeyboardInput(event) {
 			if (event.keyCode === 37) {
+				// left
 				this.gotoPrev(event);
 				return true;
 			} else if (event.keyCode === 39) {
+				// right
 				this.gotoNext(event);
 				return true;
 			} else if (event.keyCode === 27) {
+				// esc
 				this.props.onClose();
 				return true;
 			}
@@ -1815,7 +1815,7 @@ var Lightbox = (function (_Component) {
 				this.renderThumbnails(),
 				this.renderArrowPrev(),
 				this.renderArrowNext(),
-				_react2['default'].createElement(_componentsScrollLock2['default'], null)
+				_react2['default'].createElement(_reactScrolllock2['default'], null)
 			);
 		}
 	}, {
@@ -1843,15 +1843,16 @@ var Lightbox = (function (_Component) {
 			}
 
 			var thumbnailsSize = showThumbnails ? _theme2['default'].thumbnail.size : 0;
-			var heightOffset = _theme2['default'].header.height + _theme2['default'].footer.height + thumbnailsSize + _theme2['default'].container.gutter.vertical + 'px';
+			var heightOffset = _theme2['default'].header.height + _theme2['default'].footer.height + thumbnailsSize + _theme2['default'].container.gutter.vertical;
 
 			var item = {
 				image: image,
 				className: (0, _aphroditeNoImportant.css)(classes.image),
 				style: {
 					cursor: this.props.onClickImage ? 'pointer' : 'auto',
-					maxHeight: 'calc(100vh - ' + heightOffset + ')'
+					maxHeight: 'calc(100vh - ' + heightOffset + 'px)'
 				},
+				heightOffset: heightOffset,
 				sizes: sizes,
 				contentClassName: (0, _aphroditeNoImportant.css)(classes.figure),
 				srcset: srcset,
@@ -1939,7 +1940,6 @@ Lightbox.propTypes = {
 	onClose: _react.PropTypes.func.isRequired,
 	preloadNextImage: _react.PropTypes.bool,
 	renderImage: _react.PropTypes.func,
-	sheet: _react.PropTypes.object,
 	showCloseButton: _react.PropTypes.bool,
 	showImageCount: _react.PropTypes.bool,
 	showThumbnails: _react.PropTypes.bool,
@@ -1986,7 +1986,7 @@ exports['default'] = Lightbox;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/Arrow":25,"./components/Container":26,"./components/Footer":27,"./components/Header":28,"./components/PaginatedThumbnails":30,"./components/Portal":32,"./components/ScrollLock":33,"./theme":39,"./utils":43,"aphrodite/no-important":6}],25:[function(require,module,exports){
+},{"./components/Arrow":25,"./components/Container":26,"./components/Footer":27,"./components/Header":28,"./components/PaginatedThumbnails":30,"./components/Portal":32,"./theme":38,"./utils":42,"aphrodite/no-important":6,"react-scrolllock":undefined}],25:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2097,7 +2097,7 @@ var defaultStyles = {
 module.exports = Arrow;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../theme":39,"../utils":43,"./Icon":29,"aphrodite/no-important":6}],26:[function(require,module,exports){
+},{"../theme":38,"../utils":42,"./Icon":29,"aphrodite/no-important":6}],26:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2158,7 +2158,7 @@ var defaultStyles = {
 module.exports = Container;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../theme":39,"../utils":43,"aphrodite/no-important":6}],27:[function(require,module,exports){
+},{"../theme":38,"../utils":42,"aphrodite/no-important":6}],27:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2253,7 +2253,7 @@ var defaultStyles = {
 module.exports = Footer;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../theme":39,"../utils":43,"aphrodite/no-important":6}],28:[function(require,module,exports){
+},{"../theme":38,"../utils":42,"aphrodite/no-important":6}],28:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2341,7 +2341,7 @@ var defaultStyles = {
 module.exports = Header;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../theme":39,"../utils":43,"./Icon":29,"aphrodite/no-important":6}],29:[function(require,module,exports){
+},{"../theme":38,"../utils":42,"./Icon":29,"aphrodite/no-important":6}],29:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2388,7 +2388,7 @@ exports['default'] = Icon;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../icons":38}],30:[function(require,module,exports){
+},{"../icons":37}],30:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2620,7 +2620,7 @@ PaginatedThumbnails.propTypes = {
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../theme":39,"./Arrow":25,"./Thumbnail":34,"aphrodite/no-important":6}],31:[function(require,module,exports){
+},{"../theme":38,"./Arrow":25,"./Thumbnail":33,"aphrodite/no-important":6}],31:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2788,91 +2788,6 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
-
-var _react2 = _interopRequireDefault(_react);
-
-var lockCount = 0;
-
-var ScrollLock = (function (_Component) {
-	_inherits(ScrollLock, _Component);
-
-	function ScrollLock() {
-		_classCallCheck(this, ScrollLock);
-
-		_get(Object.getPrototypeOf(ScrollLock.prototype), 'constructor', this).apply(this, arguments);
-	}
-
-	_createClass(ScrollLock, [{
-		key: 'componentWillMount',
-		value: function componentWillMount() {
-			if (typeof window === 'undefined') return;
-
-			lockCount++;
-			if (lockCount > 1) return;
-
-			//	FIXME iOS ignores overflow on body
-			try {
-				var scrollBarWidth = window.innerWidth - document.body.clientWidth;
-
-				var target = document.body;
-
-				target.style.paddingRight = scrollBarWidth + 'px';
-				target.style.overflowY = 'hidden';
-			} catch (err) {
-				console.error('Failed to find body element. Err:', err);
-			}
-		}
-	}, {
-		key: 'componentWillUnmount',
-		value: function componentWillUnmount() {
-			if (typeof window === 'undefined' || lockCount === 0) return;
-
-			lockCount--;
-			if (lockCount > 0) return; // Still locked
-
-			//	FIXME iOS ignores overflow on body
-			try {
-				var target = document.body;
-
-				target.style.paddingRight = '';
-				target.style.overflowY = '';
-			} catch (err) {
-				console.error('Failed to find body element. Err:', err);
-			}
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			return null;
-		}
-	}]);
-
-	return ScrollLock;
-})(_react.Component);
-
-exports['default'] = ScrollLock;
-module.exports = exports['default'];
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],34:[function(require,module,exports){
-(function (global){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
@@ -2944,7 +2859,7 @@ exports['default'] = Thumbnail;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../theme":39,"../utils":43,"aphrodite/no-important":6}],35:[function(require,module,exports){
+},{"../theme":38,"../utils":42,"aphrodite/no-important":6}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2957,7 +2872,7 @@ exports["default"] = function (fill) {
 
 module.exports = exports["default"];
 
-},{}],36:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2970,7 +2885,7 @@ exports["default"] = function (fill) {
 
 module.exports = exports["default"];
 
-},{}],37:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2983,7 +2898,7 @@ exports["default"] = function (fill) {
 
 module.exports = exports["default"];
 
-},{}],38:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -2992,7 +2907,7 @@ module.exports = {
 	close: require('./close')
 };
 
-},{"./arrowLeft":35,"./arrowRight":36,"./close":37}],39:[function(require,module,exports){
+},{"./arrowLeft":34,"./arrowRight":35,"./close":36}],38:[function(require,module,exports){
 // ==============================
 // THEME
 // ==============================
@@ -3051,7 +2966,7 @@ theme.arrow = {
 
 module.exports = theme;
 
-},{}],40:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /**
 	Bind multiple component methods:
 
@@ -3074,14 +2989,14 @@ module.exports = function bindFunctions(functions) {
 	});
 };
 
-},{}],41:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 // Return true if window + document
 
 'use strict';
 
 module.exports = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
-},{}],42:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -3108,7 +3023,7 @@ function deepMerge(target) {
 
 module.exports = deepMerge;
 
-},{}],43:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -3131,5 +3046,5 @@ module.exports = {
 	deepMerge: _deepMerge2['default']
 };
 
-},{"./bindFunctions":40,"./canUseDom":41,"./deepMerge":42}]},{},[24])(24)
+},{"./bindFunctions":39,"./canUseDom":40,"./deepMerge":41}]},{},[24])(24)
 });
