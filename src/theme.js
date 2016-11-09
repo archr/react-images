@@ -41,7 +41,7 @@ theme.footer = {
 // thumbnails
 theme.thumbnail = {
 	activeBorderColor: 'white',
-	size: 50,
+	size: 100,
 	gutter: 2,
 };
 
