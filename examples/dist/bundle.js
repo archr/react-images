@@ -2626,9 +2626,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _aphroditeNoImportant = require('aphrodite/no-important');
 
-var _reactScrolllock = require('react-scrolllock');
-
-var _reactScrolllock2 = _interopRequireDefault(_reactScrolllock);
+// import ScrollLock from 'react-scrolllock';
 
 var _theme = require('./theme');
 
@@ -2855,8 +2853,7 @@ var Lightbox = (function (_Component) {
 				),
 				this.renderThumbnails(),
 				this.renderArrowPrev(),
-				this.renderArrowNext(),
-				_react2['default'].createElement(_reactScrolllock2['default'], null)
+				this.renderArrowNext()
 			);
 		}
 	}, {
@@ -3026,4 +3023,4 @@ var classes = _aphroditeNoImportant.StyleSheet.create({
 exports['default'] = Lightbox;
 module.exports = exports['default'];
 
-},{"./components/Arrow":24,"./components/Container":25,"./components/Footer":26,"./components/Header":27,"./components/PaginatedThumbnails":29,"./components/Portal":31,"./theme":37,"./utils":41,"aphrodite/no-important":6,"react":undefined,"react-scrolllock":undefined}]},{},[]);
+},{"./components/Arrow":24,"./components/Container":25,"./components/Footer":26,"./components/Header":27,"./components/PaginatedThumbnails":29,"./components/Portal":31,"./theme":37,"./utils":41,"aphrodite/no-important":6,"react":undefined}]},{},[]);
